@@ -44,3 +44,10 @@ fetch("http://localhost:5678/api/works", { method: "GET" })
     console.log(myHTML);
     HTML.innerHTML = myHTML;
   });
+  fetch("http://localhost:5678/api/categories", { method: "GET" })
+  .then((response) => {
+    return response.json();
+  })
+  .then((categories) => {
+    console.log(categories);
+  });
