@@ -80,6 +80,26 @@ input{
 .email{
 	margin-bottom: 23px;
 }
+.button{
+	display: flex;
+	flex-direction: column;
+	margin-top: 35px;
+}
+.connexion, .oublier{
+	text-decoration: none;
+	padding: 10px;
+}
+.connexion{
+	background: #1D6154;
+	border-radius: 60px;
+	color: white;
+	display: flex;
+	justify-content: center;
+}
+.oublier:visited {
+	color: inherit;
+  }
+  
 h1{
 	display: flex;
 	flex-direction: column;
