@@ -241,3 +241,9 @@ padding: 10px;
 	background-color: #1D6154;
 	color: white;
 }
+.error-message {
+	color: red;
+	font-size: 14px;
+	/* autres styles que tu souhaites appliquer */
+  }
+  
