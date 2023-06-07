@@ -1,70 +1,81 @@
-// fetch("http://localhost:5678/api/works", { method: "GET" })
-//   .then((data) => {
-//     return data.json();
-//   })
-//   .then((projets) => {
-//     console.log(projets);
-//   });
-//  let HTML= document.getElementById("cartes")
-
-// let myHTML=""
-
-// projets.forEach(projet => {
-//     console.log(projet.imageUrl)
-//     console.log(projet.title)
-//     myHTML +=`<figure>
-//     <img src="${projet.imageUrl}" alt="${projet.title}" />
-//     <figcaption>${projet.title}</figcaption>
-//   </figure>`
-    
-// });
-
-// console.log(myHTML)
-// HTML.innerHTML=myHTML
+let projets;
+let categoriesArray = [];
 
 fetch("http://localhost:5678/api/works", { method: "GET" })
+  .then((response) => response.json())
   .then((data) => {
-    return data.json();
-  })
-  .then((projets) => {
+    projets = data;
     console.log(projets);
 
-    let HTML = document.getElementById("cartes");
-    let myHTML = "";
-
-    // const monSet = new Set();
-    const test =[];
-
-   
+    let cartesHTML = document.getElementById("cartes");
 
     projets.forEach((projet) => {
-    //   console.log(projet.imageUrl);
-    //   console.log(projet.title);
-      myHTML += `<figure>
-        <img src="${projet.imageUrl}" alt="${projet.title}" />
-        <figcaption>${projet.title}</figcaption>
-      </figure>`;
+      let figure = document.createElement("figure");
+      let img = document.createElement("img");
+      img.src = projet.imageUrl;
+      img.alt = projet.title;
+      let figcaption = document.createElement("figcaption");
+      figcaption.textContent = projet.title;
 
-    //   monSet.add(projet.category); 
-      test.push(projet.category); 
+      figure.appendChild(img);
+      figure.appendChild(figcaption);
+
+      cartesHTML.appendChild(figure);
+
+      if (!categoriesArray.includes(projet.category.name)) {
+        categoriesArray.push(projet.category.name);
+      }
     });
 
-    console.log(test);
-    HTML.innerHTML = myHTML;
+    let optionsHTML = document.getElementById("options");
 
+    categoriesArray.forEach((categorie) => {
+      let div = document.createElement("div");
+      let span = document.createElement("span");
+      let link = document.createElement("a");
 
-    // Créer un nouveau tableau a partir des projet
+      link.textContent = categorie;
+      link.href = "#" + categorie.toLowerCase();
 
+      span.appendChild(link);
+      div.appendChild(span);
+      optionsHTML.appendChild(div);
 
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        let selectedCategory = link.textContent.trim();
+
+        let filteredProjects = projets.filter(
+          (projet) => projet.category.name === selectedCategory
+        );
+
+        updateDisplayedProjects(filteredProjects);
+      });
+    });
+
+    console.log("Nombre de projets:", projets.length);
+    console.log("Nombre de catégories:", categoriesArray.length);
   });
 
+function updateDisplayedProjects(projects) {
+  let cartesHTML = document.getElementById("cartes");
 
-  fetch("http://localhost:5678/api/categories", { method: "GET" })
-  .then((response) => {
-    return response.json();
-  })
-  .then((categories) => {
-    console.log(categories);
+  while (cartesHTML.firstChild) {
+    cartesHTML.firstChild.remove();
+  }
+
+  projects.forEach((projet) => {
+    let figure = document.createElement("figure");
+    let img = document.createElement("img");
+    img.src = projet.imageUrl;
+    img.alt = projet.title;
+    let figcaption = document.createElement("figcaption");
+    figcaption.textContent = projet.title;
+
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+
+    cartesHTML.appendChild(figure);
   });
-
-
+}
