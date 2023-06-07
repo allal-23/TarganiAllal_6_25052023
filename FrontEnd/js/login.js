@@ -17,18 +17,23 @@ document.querySelector('.connexion').addEventListener('click', function(event) {
       .then(response => {
         if (response.ok) {
           // Authentification réussie
-          window.location.href = 'FrontEnd/index.html';
+          return response.json(); // Récupère la réponse JSON du serveur
         } else {
           // Combinaison utilisateur - mot de passe incorrecte
           return response.json().then(data => {
-            const errorMessageElement = document.getElementById('errorMessage');
-            errorMessageElement.textContent = data.message;
+            throw new Error(data.message);
           });
         }
       })
+      .then(data => {
+        // Stocke le token d'authentification dans le stockage local
+        localStorage.setItem("token", data.token);
+        // Redirige vers la page d'accueil
+        window.location.href = 'FrontEnd/index.html';
+      })
       .catch(error => {
         console.error(error);
-        // Afficher un message d'erreur générique
+        // Affiche un message d'erreur générique
         const errorMessageElement = document.getElementById('errorMessage');
         errorMessageElement.textContent = 'Une erreur s\'est produite lors de l\'authentification';
       });

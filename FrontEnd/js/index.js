@@ -1,5 +1,5 @@
 let projets;
-let categoriesArray = [];
+let categoriesArray = ["Tous"]; // Ajouter la catégorie "Tous" initialement
 
 fetch("http://localhost:5678/api/works", { method: "GET" })
   .then((response) => response.json())
@@ -46,9 +46,14 @@ fetch("http://localhost:5678/api/works", { method: "GET" })
 
         let selectedCategory = link.textContent.trim();
 
-        let filteredProjects = projets.filter(
-          (projet) => projet.category.name === selectedCategory
-        );
+        let filteredProjects;
+        if (selectedCategory === "Tous") {
+          filteredProjects = projets;
+        } else {
+          filteredProjects = projets.filter(
+            (projet) => projet.category.name === selectedCategory
+          );
+        }
 
         updateDisplayedProjects(filteredProjects);
       });
