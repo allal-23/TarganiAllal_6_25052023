@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Modale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="./js/modale.js" defer></script>
+  </head>
+  <!-- HTML -->
+  <button id="modifierBtn">Modifier</button>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Ajouter des médias dans la galerie</h3>
+      <form id="ajouterForm">
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" />
+
+        <label for="imageUrl">URL de l'image :</label>
+        <input type="text" id="imageUrl" name="imageUrl" />
+
+        <label for="categoryId">ID de catégorie :</label>
+        <input type="text" id="categoryId" name="categoryId" />
+
+        <button type="submit">Ajouter</button>
+      </form>
+    </div>
+  </div>
+</html>
