@@ -12,10 +12,58 @@
     />
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
+    <script
+      src="https://kit.fontawesome.com/a164194032.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="./js/index.js" defer></script>
+    <script src="./js/modale.js" defer></script>
+    <script src="./js/login.js" defer></script>
   </head>
   <body>
-    <div class="barre"><a href="modale.html">Mode édition</a></div>
+    <div class="ban" id="ban">
+      <i class="fa-solid fa-pen-to-square"></i
+      ><button class="ouvrir">Mode édition</button>
+      <button class="publier">publier les changements</button>
+    </div>
+
+    <div class="overlay"></div>
+    <div class="modal">
+      <div class="modal__close"><i class="fa-solid fa-xmark"></i></div>
+      <div class="modal__header">
+        <h2 class="modal_titre">Galerie photo</h2>
+      </div>
+      <div class="modal__body">
+        <p>Lorem ipsum</p>
+      </div>
+      <div class="modal__footer">
+        <button class="modal__footer_button">Ajouter des projets</button>
+        <button class="modal__footer_supprimer">Supprimer les projets</button>
+      </div>
+    </div>
+    <div class="modal2" style="display: none">
+      <div class="modal2__close"><i class="fa-solid fa-xmark"></i></div>
+      <div class="modal2__header">
+        <h2 class="modal2_titre">Ajout photo</h2>
+      </div>
+      <form id="ajouterForm">
+        <label for="imageFile">Image :</label>
+        <input
+          type="file"
+          id="imageFile"
+          name="imageFile"
+          accept=".jpg, .jpeg, .png"
+        />
+
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" />
+
+        <label for="categoryId">Catégorie :</label>
+        <input type="text" id="categoryId" name="categoryId" />
+
+        <button type="submit">Valider</button>
+      </form>
+    </div>
     <header>
       <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
       <nav>
