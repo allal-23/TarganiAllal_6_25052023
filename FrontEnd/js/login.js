@@ -22,7 +22,7 @@ document
           // Authentification réussie
           return response.json(); // Récupère la réponse JSON du serveur
         } else {
-          //   // Combinaison utilisateur - mot de passe incorrecte
+          // Combinaison utilisateur - mot de passe incorrecte
           return response.json().then((data) => {
             console.log(data);
             throw new Error(data.message);
@@ -35,6 +35,13 @@ document
         localStorage.setItem("token", data.token);
         // Redirige vers la page d'accueil
         window.location.href = "./index.html";
+
+        // Vérifier si le token est présent et masquer la div options si c'est le cas
+        const token = data.token;
+        const optionsElement = document.getElementById("options");
+        if (token && token !== "null") {
+          optionsElement.style.display = "none";
+        }
 
         // Mettre à jour la visibilité de la classe "ban"
         updateBanVisibility();
@@ -50,44 +57,3 @@ document
         updateBanVisibility();
       });
   });
-
-// document.getElementById("ajouterForm").addEventListener("submit", function(event) {
-//   event.preventDefault();
-
-//   var formData = new FormData();
-
-//   var title = document.getElementById("title").value;
-//   var imageFile = document.getElementById("imageFile").files[0];
-//   var categoryId = document.getElementById("categoryId").value;
-
-//   formData.append("title", title);
-//   formData.append("imageFile", imageFile);
-//   formData.append("categoryId", categoryId);
-//   formData.append("userId", 0);
-
-//   // Vérifier si toutes les informations nécessaires sont présentes
-//   if (title.trim() === '' || imageFile === undefined || categoryId.trim() === '') {
-//     // Afficher un message d'erreur si le formulaire n'est pas correctement rempli
-//     alert("Veuillez remplir tous les champs du formulaire.");
-//     return;
-//   }
-
-//   fetch("http://localhost:5678/api/works", {
-//     method: "POST",
-//     body: formData
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     // Traiter la réponse de l'API et mettre à jour le DOM
-//     console.log(data);
-//     // Afficher la nouvelle image dans la galerie
-//     // ...
-//     // Fermer la fenêtre modale
-//     document.getElementById("modal").style.display = "none";
-//   })
-//   .catch(error => {
-//     console.log(error);
-//     // Afficher un message d'erreur si la requête échoue
-//     alert("Une erreur s'est produite lors de l'ajout de l'image.");
-//   });
-// });
