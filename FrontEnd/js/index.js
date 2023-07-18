@@ -12,91 +12,107 @@ fetch("http://localhost:5678/api/works", { method: "GET" })
     projets.forEach((projet) => {
       createFigure(projet, cartesHTML);
 
+      createImageTextDiv(projet);
+
       if (!categoriesArray.includes(projet.category.name)) {
         categoriesArray.push(projet.category.name);
       }
     });
 
-    let optionsHTML = document.getElementById("options");
+    console.log(categoriesArray);
 
-    categoriesArray.forEach((categorie) => {
-      let div = document.createElement("div");
-      let span = document.createElement("span");
-      let link = document.createElement("a");
+    generateCategories(categoriesArray, projets);
 
-      link.textContent = categorie;
-      link.href = "#" + categorie.toLowerCase();
-      if (categorie === "Tous") {
-        link.classList.add("active");
-      }
+    console.log("Nombre de projets:", projets.length);
+    console.log("Nombre de catégories:", categoriesArray.length);
+  });
 
-      span.appendChild(link);
-      div.appendChild(span);
-      optionsHTML.appendChild(div);
+function generateCategories(categoriesArray, projets) {
+  let optionsHTML = document.getElementById("options");
+  let selectCategory = document.getElementById("categoryId");
 
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
+  // Créer le bouton "Tous"
+  let allButton = document.createElement("a");
+  allButton.textContent = "Tous";
+  allButton.href = "#";
+  let allDiv = document.createElement("div");
+  let allSpan = document.createElement("span");
+  allSpan.appendChild(allButton);
+  allDiv.appendChild(allSpan);
+  optionsHTML.appendChild(allDiv);
 
-        let selectedCategory = link.textContent.trim();
+  // Ajouter un événement click pour afficher tous les projets sans filtrage de catégorie
+  allButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    updateDisplayedProjects(projets);
 
-        let filteredProjects;
-        if (selectedCategory === "Tous") {
-          filteredProjects = projets;
-        } else {
-          filteredProjects = projets.filter(
-            (projet) => projet.category.name === selectedCategory
-          );
+    // Supprimer la classe "active" de tous les liens
+    const links = document.querySelectorAll("#options a");
+    links.forEach((link) => {
+      link.classList.remove("active");
+    });
+
+    // Ajouter la classe "active" au lien "Tous"
+    allButton.classList.add("active");
+  });
+
+  // Utiliser une requête Fetch pour récupérer les ID de catégorie auprès de votre API
+  fetch("http://localhost:5678/api/categories", { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      // data contient les informations sur les catégories, y compris leurs ID
+      data.forEach((categorie, index) => {
+        if (categorie.name !== "Tous") {
+          let option = document.createElement("option");
+          option.value = categorie.id; // Utiliser l'ID de catégorie comme valeur
+          option.textContent = categorie.name; // Utiliser le nom de catégorie comme texte
+
+          selectCategory.appendChild(option);
+
+          // Créer les pages
+          let div = document.createElement("div");
+          let span = document.createElement("span");
+          let link = document.createElement("a");
+
+          link.textContent = categorie.name;
+          link.href = "#" + categorie.name.toLowerCase();
+
+          span.appendChild(link);
+          div.appendChild(span);
+          optionsHTML.appendChild(div);
+
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            let selectedCategory = link.textContent.trim();
+
+            let filteredProjects;
+            if (selectedCategory === "Tous") {
+              filteredProjects = projets;
+            } else {
+              filteredProjects = projets.filter(
+                (projet) => projet.category.name === selectedCategory
+              );
+            }
+
+            updateDisplayedProjects(filteredProjects);
+
+            // Supprimer la classe "active" de tous les liens
+            const links = document.querySelectorAll("#options a");
+            links.forEach((link) => {
+              link.classList.remove("active");
+            });
+
+            // Ajouter la classe "active" au lien sélectionné
+            link.classList.add("active");
+          });
         }
-
-        updateDisplayedProjects(filteredProjects);
-
-        // Supprimer la classe "active" de tous les liens
-        const links = document.querySelectorAll("#options a");
-        links.forEach((link) => {
-          link.classList.remove("active");
-        });
-
-        // Ajouter la classe "active" au lien sélectionné
-        link.classList.add("active");
       });
+    })
+    .catch((error) => {
+      console.error("Erreur lors du chargement des catégories :", error);
     });
-
-    console.log("Nombre de projets:", projets.length);
-    console.log("Nombre de catégories:", categoriesArray.length);
-  });
-// ...
-
-fetch("http://localhost:5678/api/works", { method: "GET" })
-  .then((response) => response.json())
-  .then((data) => {
-    projets = data;
-    console.log(projets);
-
-    let cartesHTML = document.getElementById("cartes");
-
-    projets.forEach((projet) => {
-      createFigure(projet, cartesHTML);
-
-      if (!categoriesArray.includes(projet.category.name)) {
-        categoriesArray.push(projet.category.name);
-      }
-    });
-
-    let selectCategory = document.getElementById("categoryId");
-
-    categoriesArray.forEach((categorie) => {
-      let option = document.createElement("option");
-      option.value = categorie.toLowerCase();
-      option.textContent = categorie;
-
-      selectCategory.appendChild(option);
-    });
-
-    console.log("Nombre de projets:", projets.length);
-    console.log("Nombre de catégories:", categoriesArray.length);
-  });
-
-// ...
+}
 
 function updateDisplayedProjects(projects) {
   let cartesHTML = document.getElementById("cartes");
@@ -121,7 +137,7 @@ const createFigure = (projet, cartesHTML) => {
   cartesHTML.appendChild(figure);
 };
 
-// Fonction pour mettre à jour la visibilité de la classe "ban"
+// Fonction pour mettre à jour la visibilité de la classe "ban" et de la div "options"
 function updateBanVisibility() {
   // Récupérer le token du stockage local
   const token = localStorage.getItem("token");
@@ -129,13 +145,43 @@ function updateBanVisibility() {
   // Sélectionner l'élément avec la classe "ban"
   const banElement = document.querySelector(".ban");
 
+  // Sélectionner l'élément avec l'id "options"
+  const optionsElement = document.getElementById("options");
+
+  // Sélectionner l'élément avec l'id "toggleButton"
+  const toggleButton = document.getElementById("toggleButton");
+
   // Vérifier si le token existe et si l'utilisateur est authentifié
   if (token && token !== "null") {
     // Afficher la classe "ban"
     banElement.style.display = "flex";
+
+    // Masquer la div avec l'id "options"
+    optionsElement.style.display = "none";
+
+    // Afficher le bouton avec l'icône
+    toggleButton.style.display = "block";
+
+    // Ajouter l'icône à la div du bouton
+    // const icon = document.createElement("i");
+    // icon.classList.add("fa", "fa-solid", "fa-pen-to-square");
+    // toggleButton.appendChild(icon);
+
+    // Rediriger vers la modale lorsque le bouton est cliqué
+    toggleButton.addEventListener("click", function () {
+      // Code pour ouvrir la modale
+      const mainModal = document.querySelector(".modal");
+      mainModal.style.display = "flex";
+    });
   } else {
     // Masquer la classe "ban"
     banElement.style.display = "none";
+
+    // Afficher la div avec l'id "options"
+    optionsElement.style.display = "flex";
+
+    // Masquer le bouton
+    toggleButton.style.display = "none";
   }
 }
 
