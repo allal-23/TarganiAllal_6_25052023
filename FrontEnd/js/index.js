@@ -1,31 +1,39 @@
 let projets;
 let categoriesArray = ["Tous"];
 
-fetch("http://localhost:5678/api/works", { method: "GET" })
-  .then((response) => response.json())
-  .then((data) => {
-    projets = data;
-    console.log(projets);
+function getWorksAndInit() {
+  fetch("http://localhost:5678/api/works", { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      projets = data;
+      console.log(projets);
 
-    let cartesHTML = document.getElementById("cartes");
+      let cartesHTML = document.getElementById("cartes");
+      cartesHTML.innerHTML = "";
 
-    projets.forEach((projet) => {
-      createFigure(projet, cartesHTML);
+      const modalBody = document.querySelector(".modal__body");
+      modalBody.innerHTML = "";
 
-      createImageTextDiv(projet);
+      projets.forEach((projet) => {
+        createFigure(projet, cartesHTML);
 
-      if (!categoriesArray.includes(projet.category.name)) {
-        categoriesArray.push(projet.category.name);
-      }
+        createImageTextDiv(projet, modalBody);
+
+        if (!categoriesArray.includes(projet.category.name)) {
+          categoriesArray.push(projet.category.name);
+        }
+      });
+
+      console.log(categoriesArray);
+
+      generateCategories(categoriesArray, projets);
+
+      console.log("Nombre de projets:", projets.length);
+      console.log("Nombre de catégories:", categoriesArray.length);
     });
+}
 
-    console.log(categoriesArray);
-
-    generateCategories(categoriesArray, projets);
-
-    console.log("Nombre de projets:", projets.length);
-    console.log("Nombre de catégories:", categoriesArray.length);
-  });
+getWorksAndInit();
 
 function generateCategories(categoriesArray, projets) {
   let optionsHTML = document.getElementById("options");
@@ -56,7 +64,7 @@ function generateCategories(categoriesArray, projets) {
     allButton.classList.add("active");
   });
 
-  // Utiliser une requête Fetch pour récupérer les ID de catégorie auprès de votre API
+  // Utiliser une requête Fetch pour récupérer les ID de catégorie auprès de l' API
   fetch("http://localhost:5678/api/categories", { method: "GET" })
     .then((response) => response.json())
     .then((data) => {
@@ -186,3 +194,39 @@ function updateBanVisibility() {
 }
 
 updateBanVisibility();
+function mettreAJourLienConnexion() {
+  const lienConnexion = document.getElementById("loginLink");
+  const token = localStorage.getItem("token");
+
+  if (token && token !== "null") {
+    // L'utilisateur est connecté
+    lienConnexion.textContent = "Logout";
+  } else {
+    // L'utilisateur est déconnecté
+    lienConnexion.textContent = "Login";
+  }
+}
+
+// Gérer le clic sur le lien "login/logout"
+document
+  .getElementById("loginLink")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    if (token && token !== "null") {
+      // L'utilisateur est connecté et souhaite se déconnecter
+      localStorage.removeItem("token");
+      window.location.reload();
+    } else {
+      // L'utilisateur est déconnecté et souhaite se connecter (redirection vers la page de connexion)
+      window.location.href = "/FrontEnd/login.html";
+    }
+
+    // Mettre à jour le lien de connexion/déconnexion après la connexion/déconnexion
+    mettreAJourLienConnexion();
+  });
+
+// Appeler la fonction pour mettre à jour le lien de connexion/déconnexion au chargement de la page
+mettreAJourLienConnexion();

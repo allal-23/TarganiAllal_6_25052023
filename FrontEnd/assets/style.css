@@ -425,7 +425,7 @@ footer nav ul {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 495px;
-  height: 456px;
+  height: 520px;
   background-color: white;
   border-radius: 3px;
   padding: 20px;
@@ -481,9 +481,9 @@ footer nav ul {
 }
 .delete-icon {
   cursor: pointer;
-  position: relative;
-  bottom: 140px;
-  left: 50px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 a {
@@ -511,4 +511,74 @@ a {
 }
 .fas {
   color: black;
+}
+.image-icon-container {
+  margin-bottom: 30px;
+}
+.image-icon-container i {
+  font-size: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.image-icon-container span {
+  display: block;
+  text-align: center;
+  font-size: 16px;
+}
+
+#imageFile {
+  display: none;
+}
+
+#background {
+  background: #e8f1f6;
+  width: 80%;
+  margin-bottom: 10px;
+}
+/* Add this CSS to your existing styles */
+#preview {
+  /* Center the background image */
+  background-position: center;
+  /* Ensure the background image does not repeat */
+  background-repeat: no-repeat;
+  /* Adjust the background size to cover the entire container */
+  background-size: contain;
+  /* Set the height of the container to 100% */
+  height: 100%;
+  /* Background color for the container */
+  background-color: #e8f1f6;
+  /* Rounded border for the container */
+
+  /* Remove default border for the img element */
+  overflow: hidden;
+}
+
+.custom-icon {
+  /* Center the icon within the container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Set the size of the container */
+  width: 100px;
+  height: 100px;
+  /* Set the margin to position the container */
+  margin: 10px auto;
+}
+
+.custom-icon i {
+  /* Set the size of the icon */
+  font-size: 50px;
+  /* Set the color of the icon */
+  color: black;
+}
+
+#imageFile {
+  /* Hide the file input element */
+  display: none;
 }

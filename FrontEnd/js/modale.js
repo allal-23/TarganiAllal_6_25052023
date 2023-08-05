@@ -28,14 +28,15 @@ closeFormButton.addEventListener("click", function () {
   formModal.style.display = "none";
 });
 
-function createImageTextDiv(projet) {
-  const modalBody = document.querySelector(".modal__body");
+function createImageTextDiv(projet, modalBody) {
+  // const modalBody = document.querySelector(".modal__body");
+  // modalBody.innerHTML = "";
   const imageTextContainer = document.createElement("div");
   imageTextContainer.classList.add("image-text-container");
   const imageElement = document.createElement("img");
   imageElement.src = projet.imageUrl;
-  const textElement = document.createElement("p");
-  textElement.textContent = projet.title;
+  // const textElement = document.createElement("p");
+  // textElement.textContent = projet.title;
 
   const editLink = document.createElement("a");
   editLink.href = "#";
@@ -45,7 +46,7 @@ function createImageTextDiv(projet) {
   deleteIcon.classList.add("fas", "fa-trash");
 
   imageTextContainer.appendChild(imageElement);
-  imageTextContainer.appendChild(textElement);
+  // imageTextContainer.appendChild(textElement);
   imageTextContainer.appendChild(editLink);
   imageTextContainer.appendChild(deleteIcon);
 
@@ -77,6 +78,7 @@ function deleteWork(workId) {
           "Une erreur s'est produite lors de la suppression du travail."
         );
       }
+      getWorksAndInit();
       console.log("Travail supprimé avec succès !");
     })
     .catch((error) => {
@@ -127,8 +129,9 @@ addForm.addEventListener("submit", function (event) {
       console.log(data);
       // Afficher la nouvelle image dans la galerie
       // ...
+      getWorksAndInit();
       // Fermer la fenêtre modale
-      document.getElementById("modal").style.display = "none";
+      document.querySelector(".modal2").style.display = "none";
     });
   // .catch((error) => {
   //   console.log(error);
@@ -136,3 +139,45 @@ addForm.addEventListener("submit", function (event) {
   //   alert("Une erreur s'est produite lors de l'ajout de l'image.");
   // });
 });
+// Fonction pour activer l'icône lorsque l'utilisateur sélectionne une image
+function activateIcon() {
+  const imageFileInput = document.getElementById("imageFile");
+  const imageLabel = document.getElementById("preview");
+
+  imageFileInput.addEventListener("change", function () {
+    const file = imageFileInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imageLabel.style.backgroundImage = `url(${e.target.result})`;
+        imageLabel.classList.add("active");
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  activateIcon();
+});
+// Function to handle image preview
+function previewImage(event) {
+  const imageFileInput = event.target;
+  const imageLabel = imageFileInput.parentElement;
+  const imagePreview = imageLabel.querySelector(".custom-icon i");
+
+  const file = imageFileInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      // Set the background image of the image icon container
+      imageLabel.style.backgroundImage = `url(${e.target.result})`;
+      // Hide the icon by reducing its opacity
+      imagePreview.style.opacity = 0;
+    };
+
+    reader.readAsDataURL(file);
+  }
+}

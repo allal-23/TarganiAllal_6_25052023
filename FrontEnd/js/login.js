@@ -37,14 +37,14 @@ document
         window.location.href = "./index.html";
 
         // Vérifier si le token est présent et masquer la div options si c'est le cas
-        const token = data.token;
-        const optionsElement = document.getElementById("options");
-        if (token && token !== "null") {
-          optionsElement.style.display = "none";
-        }
+        // const token = data.token;
+        // const optionsElement = document.getElementById("options");
+        // if (token && token !== "null") {
+        //   optionsElement.style.display = "none";
+        // }
 
         // Mettre à jour la visibilité de la classe "ban"
-        updateBanVisibility();
+        // updateBanVisibility();
       })
       .catch((error) => {
         console.error(error);
@@ -54,6 +54,6 @@ document
           "Une erreur s'est produite lors de l'authentification";
 
         // Mettre à jour la visibilité de la classe "ban"
-        updateBanVisibility();
+        // updateBanVisibility();
       });
   });

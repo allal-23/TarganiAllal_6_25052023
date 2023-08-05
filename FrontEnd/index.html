@@ -44,14 +44,22 @@
         <h2 class="modal2_titre">Ajout photo</h2>
       </div>
       <form id="ajouterForm">
-        <label for="imageFile">Image :</label>
-        <input
-          type="file"
-          id="imageFile"
-          name="imageFile"
-          accept=".jpg, .jpeg, .png"
-        />
-
+        <div id="background">
+          <div class="image-icon-container" id="preview">
+            <label for="imageFile" id="imageLabel">
+              <div class="custom-icon">
+                <i class="fa-sharp fa-regular fa-image"></i>
+              </div>
+              <input
+                type="file"
+                id="imageFile"
+                name="imageFile"
+                accept=".jpg, .jpeg, .png"
+                onchange="previewImage(event)"
+              />
+            </label>
+          </div>
+        </div>
         <label for="title">Titre :</label>
         <input type="text" id="title" name="title" />
 
@@ -61,13 +69,14 @@
         <button type="submit">Valider</button>
       </form>
     </div>
+
     <header>
       <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
       <nav>
         <ul>
           <li>projets</li>
           <li>contact</li>
-          <li><a href="/FrontEnd/login.html">login</a></li>
+          <li><a href="/FrontEnd/login.html" id="loginLink">login</a></li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
         </ul>
       </nav>
